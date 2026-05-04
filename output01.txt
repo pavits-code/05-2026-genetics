@@ -1,0 +1,275 @@
+Organism 1:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: AA
+    B: BB
+    C: Cc
+    D: DD
+  # of Offspring: 0
+
+Organism 2:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: aa
+    B: BB
+    C: Cc
+    D: DD
+  # of Offspring: 0
+
+Organism 3:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: BB
+    C: Cc
+    D: Dd
+  # of Offspring: 0
+
+Organism 4:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: BB
+    C: Cc
+    D: DD
+  # of Offspring: 0
+
+Organism 5:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: BB
+    C: Cc
+    D: DD
+  # of Offspring: 0
+
+Organism 6:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: aa
+    B: Bb
+    C: CC
+    D: DD
+  # of Offspring: 0
+
+Organism 7:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: Bb
+    C: CC
+    D: Dd
+  # of Offspring: 0
+
+Organism 8:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: AA
+    B: Bb
+    C: CC
+    D: DD
+  # of Offspring: 0
+
+Organism 9:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: aa
+    B: Bb
+    C: Cc
+    D: DD
+  # of Offspring: 0
+
+Organism 10:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: Bb
+    C: Cc
+    D: Dd
+  # of Offspring: 0
+
+Organism 11:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: AA
+    B: Bb
+    C: Cc
+    D: DD
+  # of Offspring: 0
+
+Organism 12:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: AA
+    B: BB
+    C: CC
+    D: Dd
+  # of Offspring: 0
+
+Organism 13:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: aa
+    B: BB
+    C: CC
+    D: Dd
+  # of Offspring: 0
+
+Organism 14:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: AA
+    B: BB
+    C: Cc
+    D: Dd
+  # of Offspring: 0
+
+Organism 15:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: aa
+    B: BB
+    C: Cc
+    D: Dd
+  # of Offspring: 0
+
+Organism 16:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: BB
+    C: cc
+    D: DD
+  # of Offspring: 0
+
+Organism 17:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: Bb
+    C: CC
+    D: DD
+  # of Offspring: 0
+
+Organism 18:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: Bb
+    C: CC
+    D: DD
+  # of Offspring: 0
+
+Organism 19:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: AA
+    B: Bb
+    C: CC
+    D: Dd
+  # of Offspring: 0
+
+Organism 20:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: Bb
+    C: Cc
+    D: DD
+  # of Offspring: 0
+
+Organism 21:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: BB
+    C: CC
+    D: DD
+  # of Offspring: 0
+
+Organism 22:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: BB
+    C: CC
+    D: DD
+  # of Offspring: 0
+
+Organism 23:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: AA
+    B: BB
+    C: CC
+    D: DD
+  # of Offspring: 0
+
+Organism 24:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: aa
+    B: BB
+    C: CC
+    D: DD
+  # of Offspring: 0
+
+Organism 25:
+  Age: 0
+  Reproduction Probability: 0
+  Death Probability: 0
+  Genes:
+    A: Aa
+    B: BB
+    C: CC
+    D: Dd
+  # of Offspring: 0
+
