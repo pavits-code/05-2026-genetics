@@ -26,10 +26,21 @@ public:
 
     void print_organism();
 
+    void find_mate_for(vector<Organism *> * organisms_in);
+
+    void set_mate(Organism * mate_in);
+
+    string get_mating_status();
+
+    // Returns a pointer to a newly created organism OR nullptr
+    Organism * organism_time_step(vector<Organism *> * organisms_in);
+
 private:
     int age; // -1 means deceased
+    double mating_probability;
     double reproduction_probability;
     double death_probability;
+    string mating_status; // "LOOKING", "NOT LOOKING", "HAS MATE"
 
     map<char, pair<string, string>> genes_alleles;
     pair<Organism *, Organism *> parents;
@@ -41,15 +52,25 @@ class World {
 public:
     void read_file(string filename);
 
-    void make_world(int n);
+    void make_world();
 
     void time_step();
 
     void print_organisms();
 
+    void add_new_organism(Organism * organism_in);
+
+    Organism * get_organism(int i); // Indexing starting from i = 1.
+
+    size_t get_current_year();
+
+    size_t get_year_limit();
+
     ~World();
 private:
     size_t current_year;
+    size_t year_limit;
+    size_t initial_organism_count;
 
     map<char, map<string, double>> genes_alleles_freqs;
     map<char, map<pair<string, string>, double>> genotypes_freqs;

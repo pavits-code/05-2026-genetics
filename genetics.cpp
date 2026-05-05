@@ -1,13 +1,14 @@
 #include "genetics.hpp"
 
 Organism::Organism(map<char, pair<string, string>> genes_alleles_in) 
- : age(0), reproduction_probability(0), death_probability(0), 
-   genes_alleles(genes_alleles_in), parents(nullptr, nullptr), 
-   mate(nullptr), offspring({ }) {}
+ : age(0), mating_probability(0), reproduction_probability(0), 
+   death_probability(0), genes_alleles(genes_alleles_in), 
+   parents(nullptr, nullptr), mate(nullptr), offspring({ }) {}
 
 Organism::Organism(Organism& parent1, Organism& parent2)
-: age(0), reproduction_probability(0), death_probability(0),
-  parents(&parent1, &parent2), mate(nullptr), offspring({ }) {
+: age(0), mating_probability(0), reproduction_probability(0), 
+  death_probability(0), mating_status("NOT LOOKING"), parents(&parent1, &parent2), mate(nullptr), 
+  offspring({ }) {
     vector<pair<string, string>> genotype_options = { };
     auto it2 = (parent2.genes_alleles).begin();
 
@@ -21,10 +22,10 @@ Organism::Organism(Organism& parent1, Organism& parent2)
         genotype_options.push_back({it1->second.second, it2->second.first});
         genotype_options.push_back({it1->second.second, it2->second.second});
 
-        srand(time(0));
         int rand_num = rand() % 3;
 
         genes_alleles.insert({it1->first, genotype_options.at(rand_num)});
+        genotype_options.clear();
 
         it2++;
     }
@@ -34,7 +35,122 @@ Organism::Organism(Organism& parent1, Organism& parent2)
 }
 
 Organism * Organism::reproduce() {
-    return new Organism(*this, *mate);
+    if (mate) {
+        return new Organism(*this, *mate);
+    }
+    
+    return nullptr;
+}
+
+void Organism::die() {
+    age = -1;
+    mating_probability = 0;
+    mating_status = "NOT LOOKING";
+    if (mate) {
+        mate->mate = nullptr;
+        mate->mating_status = "LOOKING";
+        mate = nullptr;
+    }
+    reproduction_probability = 0;
+    death_probability = 0;
+}
+
+void Organism::print_organism() {
+    cout << "  Age: " << age << endl;
+    cout << "  Reproduction Probability: " << reproduction_probability << endl;
+    cout << "  Death Probability: " << death_probability << endl;
+    cout << "  Genes:" << endl;
+    for (auto it = genes_alleles.begin(); it != genes_alleles.end(); it++) {
+        cout << "    " << it->first << ": " 
+            << it->second.first << it->second.second << endl;
+    }
+    cout << "  # of Offspring: " << offspring.size() << endl;
+}
+
+void Organism::set_mate(Organism * mate_in) {
+    mate = mate_in;
+    mating_status = "HAS MATE";
+    mating_probability = 0;
+}
+
+string Organism::get_mating_status() {
+    return mating_status;
+}
+
+void Organism::find_mate_for(vector<Organism *> * organisms_in) {
+    // Loop safely through all available organisms
+    for (int i = 0; i < organisms_in->size(); i++) {
+        Organism* potential_mate = organisms_in->at(i);
+        
+        // 1. Ensure we don't mate with ourselves
+        // 2. Ensure the potential mate is actually looking
+        if (potential_mate != this && potential_mate->get_mating_status() == "LOOKING") {
+            
+            // Set mates for both organisms
+            this->set_mate(potential_mate);
+            potential_mate->set_mate(this);
+            
+            // Mate found! Exit the function immediately so we don't keep searching
+            return; 
+        }
+    }
+}
+
+Organism * Organism::organism_time_step(vector<Organism *> * organisms_in) {
+    death_probability = 1.0 - exp(-1 * age * 0.002);
+
+    if (age == -1) {
+        return nullptr;
+    }
+
+    if (age == 18) {
+        mating_status = "LOOKING";
+    }
+
+    if (age > 18 && mating_status == "LOOKING") {
+        mating_probability = 1.0 - exp(0.4 * (18 - age));
+    }
+
+    if (age > 18 && mating_status == "HAS MATE") {
+        reproduction_probability = (
+            (1.0 - exp(0.3 * (18 - age))) * (1 / exp2(offspring.size()))
+        );
+    }
+
+    age++;
+
+    // Death Schema
+    if (death_probability != 0) {
+        int deathNum = (1 / death_probability) * 100;
+        int randDeathNum = (rand() % deathNum) + 1;
+
+        if (randDeathNum < 100) {
+            die();
+        }
+    }
+    
+
+    // Mating Schema
+    if (mating_status == "LOOKING" && mating_probability != 0) {
+        int matingNum = (1 / mating_probability) * 100;
+        int randNum = (rand() % matingNum) + 1;
+
+        if (randNum < 100) {
+            find_mate_for(organisms_in);
+        }
+    }
+
+    // Reproduction Schema
+    if (mating_status == "HAS MATE" && reproduction_probability != 0) {
+        int reproductionNum = (1 / reproduction_probability) * 100;
+        int randNum = (rand() % reproductionNum) + 1;
+
+        if (randNum < 100) {
+            return reproduce();
+        }
+    }
+
+    return nullptr;
 }
 
 void World::read_file(string filename) {
@@ -45,6 +161,10 @@ void World::read_file(string filename) {
     }
 
     string line;
+    getline(reader, line);
+    istringstream iss0(line);
+    iss0 >> initial_organism_count >> year_limit;
+
     // Read one entire line from the file at a time
     while (getline(reader, line)) {
         
@@ -71,7 +191,7 @@ void World::read_file(string filename) {
     }
 }
 
-void World::make_world(int n) {
+void World::make_world() {
     if(genes_alleles_freqs.empty()) {
         return;
     }
@@ -163,7 +283,7 @@ void World::make_world(int n) {
 
     // 1. Calculate base counts and remainders
     for (const auto& combo : combined_freqs) {
-        double exact_expected = combo.second * n;
+        double exact_expected = combo.second * initial_organism_count;
         int base_count = static_cast<int>(exact_expected); // Rounds down (e.g., 33.8 becomes 33)
         double decimal_remainder = exact_expected - base_count; // The leftover (e.g., 0.8)
 
@@ -172,7 +292,7 @@ void World::make_world(int n) {
     }
 
     // 2. Figure out how many organisms we are short due to rounding down
-    int missing_organisms = n - current_total;
+    int missing_organisms = initial_organism_count - current_total;
 
     // 3. Sort the allocations by their remainder, highest to lowest
     // (A lambda function tells std::sort how to compare our custom structs)
@@ -186,7 +306,7 @@ void World::make_world(int n) {
     }
 
     // 5. Actually build the Organism objects using the finalized exact counts
-    organisms.reserve(n);
+    organisms.reserve(initial_organism_count);
 
     for (const auto& alloc : allocations) {
         for (int i = 0; i < alloc.count; ++i) {
@@ -196,16 +316,12 @@ void World::make_world(int n) {
     }
 }
 
-void Organism::print_organism() {
-    cout << "  Age: " << age << endl;
-    cout << "  Reproduction Probability: " << reproduction_probability << endl;
-    cout << "  Death Probability: " << death_probability << endl;
-    cout << "  Genes:" << endl;
-    for (auto it = genes_alleles.begin(); it != genes_alleles.end(); it++) {
-        cout << "    " << it->first << ": " 
-            << it->second.first << it->second.second << endl;
+void World::time_step() {
+    for (int i = 0; i < organisms.size(); i++) {
+        add_new_organism(organisms[i]->organism_time_step(&organisms));
     }
-    cout << "  # of Offspring: " << offspring.size() << endl;
+
+    current_year++;
 }
 
 void World::print_organisms() {
@@ -216,6 +332,24 @@ void World::print_organisms() {
     }
 }
 
+void World::add_new_organism(Organism * organism_in) {
+    if (organism_in) {
+        organisms.push_back(organism_in);
+    }
+}
+
+Organism * World::get_organism(int i) {
+    return organisms.at(i - 1);
+}
+
+size_t World::get_current_year() {
+    return current_year;
+}
+
+size_t World::get_year_limit() {
+    return year_limit;
+}
+
 World::~World() {
     for (int i = 0; i < organisms.size(); i++) {
         delete organisms[i];
@@ -223,11 +357,20 @@ World::~World() {
 }
 
 int main() {
+    srand(time(0));
     World newWorld;
 
     newWorld.read_file("input01.txt");
-    newWorld.make_world(25);
+    newWorld.make_world();
+    cout << "CURRENT YEAR: " << newWorld.get_current_year() << endl;
     newWorld.print_organisms();
+    cout << "----------" << endl;
+    while (newWorld.get_current_year() < newWorld.get_year_limit()) {
+        newWorld.time_step();
+        cout << "CURRENT YEAR: " << newWorld.get_current_year() << endl;
+        newWorld.print_organisms();
+        cout << "----------" << endl;
+    }
 
     return 0;
 }
