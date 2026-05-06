@@ -10,6 +10,7 @@
 #include <map>
 #include <random>
 #include <cstdlib>
+#include<bits/stdc++.h>
 #include <ctime>
 #include <algorithm>
 using namespace std;
@@ -30,7 +31,11 @@ public:
 
     void set_mate(Organism * mate_in);
 
+    int get_age();
+
     string get_mating_status();
+
+    map<char, pair<string, string>> * get_genes_alleles();
 
     // Returns a pointer to a newly created organism OR nullptr
     Organism * organism_time_step(vector<Organism *> * organisms_in);
@@ -57,6 +62,8 @@ public:
     void time_step();
 
     void print_organisms();
+
+    void print_allele_frequencies();
 
     void add_new_organism(Organism * organism_in);
 

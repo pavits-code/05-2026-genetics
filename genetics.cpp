@@ -73,8 +73,16 @@ void Organism::set_mate(Organism * mate_in) {
     mating_probability = 0;
 }
 
+int Organism::get_age() {
+    return age;
+}
+
 string Organism::get_mating_status() {
     return mating_status;
+}
+
+map<char, pair<string, string>> * Organism::get_genes_alleles() {
+    return &genes_alleles;
 }
 
 void Organism::find_mate_for(vector<Organism *> * organisms_in) {
@@ -332,6 +340,31 @@ void World::print_organisms() {
     }
 }
 
+void World::print_allele_frequencies() {
+    map<pair<string, string>, int> alleles = { };
+    map<string, int> genes = { };
+
+    for (int i = 0; i < organisms.size(); i++) {
+        for (
+            auto it = organisms[i]->get_genes_alleles()->begin();
+            it != organisms[i]->get_genes_alleles()->end();
+            it++
+        ) {
+            if (organisms[i]->get_age() != -1) {
+                alleles[{string(1, it->first), it->second.first}]++;
+                alleles[{string(1, it->first), it->second.second}]++;
+                genes[string(1, it->first)] += 2;
+            }
+        }
+    }
+
+    cout << "Allele frequencies:" << endl;
+    for (auto it = alleles.begin(); it != alleles.end(); it++) {
+        cout << "  " << it->first.second << ": " << fixed << setprecision(2);
+        cout << static_cast<double>(it->second) / genes[it->first.first] << endl;
+    }
+}
+
 void World::add_new_organism(Organism * organism_in) {
     if (organism_in) {
         organisms.push_back(organism_in);
@@ -363,14 +396,14 @@ int main() {
     newWorld.read_file("input01.txt");
     newWorld.make_world();
     cout << "CURRENT YEAR: " << newWorld.get_current_year() << endl;
-    newWorld.print_organisms();
+    newWorld.print_allele_frequencies();
     cout << "----------" << endl;
     while (newWorld.get_current_year() < newWorld.get_year_limit()) {
         newWorld.time_step();
     }
 
     cout << "CURRENT YEAR: " << newWorld.get_current_year() << endl;
-    newWorld.print_organisms();
+    newWorld.print_allele_frequencies();
     cout << "----------" << endl;
 
     return 0;
