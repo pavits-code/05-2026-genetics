@@ -367,10 +367,11 @@ int main() {
     cout << "----------" << endl;
     while (newWorld.get_current_year() < newWorld.get_year_limit()) {
         newWorld.time_step();
-        cout << "CURRENT YEAR: " << newWorld.get_current_year() << endl;
-        newWorld.print_organisms();
-        cout << "----------" << endl;
     }
+
+    cout << "CURRENT YEAR: " << newWorld.get_current_year() << endl;
+    newWorld.print_organisms();
+    cout << "----------" << endl;
 
     return 0;
 }
